@@ -1,0 +1,26 @@
+services:
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: productdb 
+      POSTGRES_USER:  # avaiable on readme.md
+      POSTGRES_PASSWORD:  # avaiable on readme.md
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    volumes:
+     - ./files:/app/files 
+
+volumes:
+  pgdata:
